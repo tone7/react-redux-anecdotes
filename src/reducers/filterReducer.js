@@ -8,15 +8,13 @@ export const newFilter = (newFilter) => {
 }
 
 const filterReducer = (state = initialState, action) => {
-    console.log('prev state: ', state)
-    console.log('action', action)
-
     switch(action.type){
         case "NEW_FILTER":
+            console.log('prev state: ', state)
+            console.log('action', action)
             console.log('new state: ', action.data)
             return action.data
         default: 
-            console.log('new state: ', state);
             return state
     }
 }

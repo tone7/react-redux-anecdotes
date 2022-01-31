@@ -1,16 +1,25 @@
+import anecdoteService from '../services/anecdotes'
+
 export const voteAnecdote = (anecdote) => {
-  return {
-    type: "VOTE_ANECDOTE",
-    data: {
-      ...anecdote
-    }
+  return async dispatch => {
+    const updatedAnecdote = await anecdoteService.vote(anecdote) 
+    console.log("updated: ", updatedAnecdote);
+    dispatch({
+      type: "VOTE_ANECDOTE",
+      data: {
+        ...updatedAnecdote
+      }
+    })
   }
 }
 
-export const createAnecdote = (anecdote) => {
-  return {
-    type: "NEW_ANECDOTE",
-    data: anecdote
+export const createAnecdote = content => {
+  return async dispatch => {
+    const newAnecdote = await anecdoteService.createNew(content)
+    dispatch({
+      type: "NEW_ANECDOTE",
+      data: newAnecdote
+    })
   }
 }
 
@@ -21,34 +30,36 @@ export const changeFilter = (newFilter) => {
   }
 }
 
-export const initializeAnecdotes = (anecdotes) => {
-  return {
-    type: "INIT_ANECDOTES",
-    data: anecdotes
+export const initializeAnecdotes = () => {
+  return async dispatch => {
+    const anecdotes = await anecdoteService.getAll()
+    dispatch({
+      type: "INIT_ANECDOTES",
+      data: anecdotes
+    })
   }
 }
 
 const anecdoteReducer = (state = [], action) => {
-  console.log('prev state: ', state)
-  console.log('action', action)
   let newState
 
   switch(action.type){
     case "INIT_ANECDOTES":
+      console.log('prev state: ', state)
+      console.log('action', action)
       console.log('new state: ', action.data);
       return action.data
     case "VOTE_ANECDOTE":
+      console.log('prev state: ', state)
+      console.log('action', action)
       const id = action.data.id
-      const anecdoteToVote = state.find(anecdote => anecdote.id === id)
-      const changedAnecdote = {
-        ...anecdoteToVote,
-        votes: anecdoteToVote.votes + 1
-      }
 
-      newState = state.map(anecdote => anecdote.id !== id ? anecdote : changedAnecdote)
+      newState = state.map(anecdote => anecdote.id !== id ? anecdote : action.data)
       console.log('new state: ', newState); 
       return newState
     case "NEW_ANECDOTE":
+      console.log('prev state: ', state)
+      console.log('action', action)
       if(action.data.content === ""){
         console.log('new state: ', state);
         return state
@@ -58,6 +69,8 @@ const anecdoteReducer = (state = [], action) => {
       console.log('new state: ', newState);
       return [...state, action.data]
     case "CHANGE_FILTER":
+      console.log('prev state: ', state)
+      console.log('action', action)
       newState = [...state]
       for(const anecdote of newState){
         if(anecdote.content.includes(action.data)){
@@ -69,7 +82,6 @@ const anecdoteReducer = (state = [], action) => {
       console.log('new state: ', newState);
       return newState
     default: 
-      console.log('new state: ', state);
       return state
   }
 }

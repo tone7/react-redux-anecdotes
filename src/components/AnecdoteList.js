@@ -2,7 +2,7 @@ import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import compare from "../utils/compare";
 import { voteAnecdote } from "../reducers/anecdoteReducer";
-import { showNotification, clearNotification } from "../reducers/notificationReducer";
+import { setNotification } from "../reducers/notificationReducer";
 
 const AnecdoteList = () => {
     const anecdotes = useSelector(state => state.anecdotes)
@@ -20,8 +20,7 @@ const AnecdoteList = () => {
                             has {anecdote.votes}
                             <button onClick={() => {
                                 dispatch(voteAnecdote(anecdote))
-                                dispatch(showNotification(anecdote.content, "vote"))
-                                setTimeout(() => dispatch(clearNotification()), 5000)
+                                dispatch(setNotification(`You voted '${anecdote.content}'`, 5))
                             }}>vote</button>
                         </div>
                     </div>

@@ -1,16 +1,14 @@
 const initialState = ""
 
-export const showNotification = (content, sort) => {
-    if(sort === "vote"){
-        return {
-            type: "SHOW_NOTIFICATION",
-            data: `You voted '${content}'`
-        }
-    } else {
-        return {
-            type: "SHOW_NOTIFICATION",
-            data: `You created '${content}'`
-        }
+export const setNotification = (notification, timer) => {
+    return async dispatch => {
+        setTimeout(() => {
+            dispatch(clearNotification())
+        }, (timer * 1000))
+        dispatch({
+            type: "SET_NOTIFICATION",
+            data: notification
+        })
     }
 }
 
@@ -22,18 +20,18 @@ export const clearNotification = () => {
 }
 
 const notificationReducer = (state = initialState, action) => {
-    console.log('prev state: ', state)
-    console.log('action', action)
-
     switch(action.type){
-        case "SHOW_NOTIFICATION":
+        case "SET_NOTIFICATION":
+            console.log('prev state: ', state)
+            console.log('action', action)
             console.log('new state: ', action.data)
             return action.data
         case "CLEAR_NOTIFICATION":
+            console.log('prev state: ', state)
+            console.log('action', action)
             console.log('new state: ', action.data);
             return action.data
         default: 
-            console.log('new state: ', state);
             return state
     }
 }
