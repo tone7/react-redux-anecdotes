@@ -6,6 +6,7 @@ import { setNotification } from "../reducers/notificationReducer";
 
 const AnecdoteList = () => {
     const anecdotes = useSelector(state => state.anecdotes)
+    const timerId = useSelector(state => state.timerId)
     const dispatch = useDispatch()
 
     return (
@@ -20,7 +21,7 @@ const AnecdoteList = () => {
                             has {anecdote.votes}
                             <button onClick={() => {
                                 dispatch(voteAnecdote(anecdote))
-                                dispatch(setNotification(`You voted '${anecdote.content}'`, 5))
+                                dispatch(setNotification(`You voted '${anecdote.content}'`, 5, timerId))
                             }}>vote</button>
                         </div>
                     </div>

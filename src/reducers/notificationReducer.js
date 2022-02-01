@@ -1,10 +1,17 @@
 const initialState = ""
 
-export const setNotification = (notification, timer) => {
+export const setNotification = (notification, time, timerId) => {
     return async dispatch => {
-        setTimeout(() => {
+        if(timerId !== null){
+            clearTimeout(timerId)
+        }
+        const newTimerId = setTimeout(() => {
             dispatch(clearNotification())
-        }, (timer * 1000))
+        }, (time * 1000))
+        dispatch({
+            type: "SET_TIMER_ID",
+            data: newTimerId
+        })
         dispatch({
             type: "SET_NOTIFICATION",
             data: notification
